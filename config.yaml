@@ -1,0 +1,31 @@
+# ============================================================
+# CONFIGURACIÓN DEL PIPELINE PupilTrack
+# Única sección a editar para correr con un video nuevo.
+# No hace falta tocar ningún .py.
+# ============================================================
+
+video:
+  path: "data/registro_ejemplo.mp4"
+  tipo: "auto"            # "A" (contracción), "B" (redilatación) o "auto"
+  roi: null                # [x, y, w, h] o null para detección automática
+  cada_n_frames: 1
+
+segmentacion:
+  # otsu | li | triangle | adaptativo | kmeans | region_growing | chan_vese | snake | watershed
+  metodo: "region_growing"
+  tolerancia_region_growing: 15
+  tam_apertura: 3
+  tam_cierre: 5
+
+textura:
+  # Cuántos niveles de gris para la GLCM (Módulo 3.1)
+  niveles_glcm: 32
+
+calibracion:
+  px_por_mm: null
+
+output:
+  carpeta: "resultados"
+  csv_serie_temporal: "pupila_serie_temporal.csv"
+  csv_parametros: "parametros_fisiologicos.csv"
+  csv_textura: "textura_glcm.csv"
