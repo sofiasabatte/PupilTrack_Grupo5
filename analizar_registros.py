@@ -20,7 +20,7 @@ from pupiltrack import texture as tex
 
 # --- Editar si hace falta ---
 VIDEO_A = "data/video1registroA.mp4"
-VIDEO_B = "data/video2registroB.mp4"
+VIDEO_B = "data/video1registroB.mp4"
 
 
 def procesar(video_path, tipo, carpeta_out):
