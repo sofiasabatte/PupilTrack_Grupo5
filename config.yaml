@@ -5,8 +5,8 @@
 # ============================================================
 
 video:
-  path: "data/registro_ejemplo.mp4"
-  tipo: "auto"            # "A" (contracción), "B" (redilatación) o "auto"
+  path: "data/B2.mov"
+  tipo: "B"            # "A" (contracción), "B" (redilatación) o "auto"
   roi: null                # [x, y, w, h] o null para detección automática
   cada_n_frames: 1
 
