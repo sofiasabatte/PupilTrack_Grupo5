@@ -30,6 +30,8 @@ Esto genera en `resultados/`:
 - **`pupila_serie_temporal.csv`** — frame a frame: área, diámetro, centroide
 - **`parametros_fisiologicos.csv`** — latencia, amplitud, velocidad máxima
 - **`textura_glcm.csv`** — textura de primer orden + GLCM por canal (R, G, B)
+- **`compresion_metodos.csv`** — Módulo 4: tasa de compresión, PSNR y SSIM de Huffman, RLE (H/V) y JPEG (Q = 90/50/10/5)
+- **`compresion_diametro.csv`** — Módulo 4: cuánto cambia el diámetro pupilar medido al comprimir con JPEG
 
 Si todavía no hay un video real para probar, `python generar_video_sintetico.py`
 crea uno de prueba en `data/registro_ejemplo.mp4`.
@@ -52,12 +54,14 @@ pupiltrack/                   # funciones del proyecto, organizadas por módulo 
   segmentation.py                  # Módulo 2.1 — Otsu, K-means, Snakes, Watershed
   morphology.py                     # Módulo 2.2 — morfología, Dice/IoU, descriptores de forma
   texture.py                         # Módulo 3.1 — textura 1er orden + GLCM
-  temporal.py                         # Módulos 3.2/4 — curva temporal + parámetros fisiológicos
+  temporal.py                         # Módulo 3.2 — curva temporal + parámetros fisiológicos
+  compression.py                      # Módulo 4 — Huffman, RLE, JPEG, PSNR/SSIM, efecto en el diámetro
 
 notebooks/                    # desarrollo y respuestas a la guía, un notebook por módulo
   Modulo1_Fundamentos.ipynb
   Modulo2_Segmentacion.ipynb
   Modulo3_Textura.ipynb
+  Modulo4_Compresion.ipynb
 
 data/                         # videos de entrada
 resultados/                   # CSV de salida (se generan al correr el pipeline)
@@ -65,7 +69,7 @@ resultados/                   # CSV de salida (se generan al correr el pipeline)
 
 **Los notebooks no hace falta correrlos para obtener resultados** — son el
 desarrollo paso a paso de cada módulo, con las respuestas a las preguntas
-de la guía. El resultado final (los 3 CSV) sale solo de `run_pipeline.py`.
+de la guía. El resultado final (los CSV) sale solo de `run_pipeline.py`.
 
 ---
 

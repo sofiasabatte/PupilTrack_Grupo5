@@ -9,12 +9,14 @@ editar `video.path` en config.yaml.
 """
 import sys
 import os
+import cv2
 import pandas as pd
 
 from pupiltrack.config import cargar_config
 from pupiltrack.temporal import procesar_video, calcular_parametros_fisiologicos
 from pupiltrack import acquisition as acq
 from pupiltrack import texture as tex
+from pupiltrack import compression as comp
 
 
 def main():
@@ -70,6 +72,31 @@ def main():
         print(f"Textura (GLCM, frame representativo) guardada en: {path_textura}")
     except Exception as e:
         print(f"[AVISO] No se pudo calcular textura: {e}")
+
+    # Módulo 4: compresión (Huffman, RLE H/V, JPEG Q=90/50/10/5) sobre el
+    # frame representativo y la ROI segmentada, y efecto de JPEG sobre el
+    # diámetro pupilar medido
+    try:
+        if "frames" not in locals():
+            frames, _ = acq.extraer_frames(video_path, cfg["video"].get("cada_n_frames", 1))
+        validos = df.index[df["valido"]] if "valido" in df else df.index
+        i_rep = validos[abs(validos - len(df) // 2).argmin()]
+        fila = df.loc[i_rep]
+        gris = cv2.cvtColor(frames[i_rep], cv2.COLOR_BGR2GRAY)
+        mascara = comp.mascara_pupila_en_frame(frames[i_rep], fila["centroide_x"],
+                                               fila["centroide_y"], fila["diametro_px"])
+        tabla = comp.evaluar_compresion(gris, mascara)
+        tabla.insert(0, "frame", int(i_rep))
+        path_comp = os.path.join(carpeta_out, cfg["output"].get("csv_compresion", "compresion_metodos.csv"))
+        tabla.to_csv(path_comp, index=False)
+        print(f"Compresión (Módulo 4) guardada en: {path_comp}")
+
+        efecto = comp.efecto_en_diametro(frames, df, comp.medir_diametro)
+        path_ef = os.path.join(carpeta_out, cfg["output"].get("csv_compresion_diametro", "compresion_diametro.csv"))
+        efecto.to_csv(path_ef, index=False)
+        print(f"Efecto de JPEG en el diámetro guardado en: {path_ef}")
+    except Exception as e:
+        print(f"[AVISO] No se pudo calcular compresión: {e}")
 
     print("\n--- Resumen ---")
     for k, v in parametros.items():
