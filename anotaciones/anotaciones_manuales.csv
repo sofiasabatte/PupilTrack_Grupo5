@@ -1,0 +1,9 @@
+video,frame,x_izq,x_der,y_sup,y_inf,nota
+A1,120,359,435,226,303,penumbra; velo gris del reflejo sobre la mitad derecha de la pupila
+A1,331,360,436,207,282,penumbra; velo gris del reflejo sobre la mitad derecha de la pupila
+A1,700,341,393,210,263,con luz; borde nitido
+A1,1300,330,384,203,260,con luz; borde nitido
+A2,118,505,563,268,330,penumbra; imagen desenfocada; borde poco definido
+A2,1000,512,569,314,370,con luz; reflejo corneal arriba
+B1,200,360,414,217,269,con luz; reflejo corneal arriba a la izquierda
+B1,1000,363,430,190,255,penumbra; velo gris arriba a la izquierda dentro de la pupila

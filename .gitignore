@@ -5,3 +5,5 @@ data/*.mov
 resultados/*.csv
 resultados/*.png
 .ipynb_checkpoints/
+.DS_Store
+**/.DS_Store

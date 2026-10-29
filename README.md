@@ -56,11 +56,15 @@ pupiltrack/                   # funciones del proyecto, organizadas por módulo 
   texture.py                         # Módulo 3.1 — textura 1er orden + GLCM
   temporal.py                         # Módulo 3.2 — curva temporal + parámetros fisiológicos
   compression.py                      # Módulo 4 — Huffman, RLE, JPEG, PSNR/SSIM, efecto en el diámetro
+  evaluacion.py                       # validación contra la referencia manual (Dice/IoU, MAE/RMSE)
+
+analizar_registros.py         # procesa A1, A2, B1, B2 de una vez + tabla de variabilidad
+anotaciones/                  # referencia manual del borde pupilar (8 frames) para validar
 
 notebooks/                    # desarrollo y respuestas a la guía, un notebook por módulo
   Modulo1_Fundamentos.ipynb
   Modulo2_Segmentacion.ipynb
-  Modulo3_Textura.ipynb
+  Modulo3_Textura.ipynb         # 3.1 textura + 3.2 curvas, parámetros, variabilidad, artefactos, MAE/RMSE
   Modulo4_Compresion.ipynb
 
 data/                         # videos de entrada
@@ -80,3 +84,31 @@ En `config.yaml`, `segmentacion.metodo` acepta: `otsu`, `li`, `triangle`,
 
 ---
 
+
+---
+
+## Módulo 0 — Registros del grupo
+
+Cuatro registros de unos 22–25 s, grabados con celular a ~60 fps (1 ojo en primer plano, cabeza apoyada):
+
+| Registro | Tipo | Protocolo |
+|---|---|---|
+| A1, A2 | A — contracción | penumbra → se enciende la luz (flash de otro celular) |
+| B1, B2 | B — redilatación | luz encendida → se apaga |
+
+Los videos no se suben al repositorio por su tamaño. Para reproducir los análisis, copiarlos en `data/` como `A1.mov`, `A2.mov`, `B1.mov` y `B2.mov` y correr `python analizar_registros.py` o los notebooks.
+
+## Resumen de resultados
+
+| Registro | Basal → extremo (px) | Amplitud | Latencia | Frames válidos |
+|---|---|---|---|---|
+| A1 | 75,4 → 53,4 | 29,2 % | 0,23 s | 92 % |
+| A2 | 68,4 → 59,5 | 13,0 % | 0,57 s* | 88 % |
+| B1 | 56,6 → 67,5 | 19,4 % | 0,20 s | 95 % |
+| B2 | 56,0 → 66,6 | 19,0 % | 0,53 s | 88 % |
+
+\* Latencia de A2 afectada por un artefacto de iluminación en el instante del flash (ver Módulo 3).
+
+- **Segmentación** (Módulo 2): watershed con marcadores sobre el gradiente, con un Dice de **0,94** contra la referencia manual (Otsu 0,25; K-means K = 5 0,78; Snake 0,76).
+- **Validación del diámetro** (Módulo 3.2): **MAE = 2,4 px (4,1 %)**, **RMSE = 2,8 px** sobre 8 frames anotados a mano.
+- **Compresión** (Módulo 4): JPEG Q = 50 (19,7:1) no altera el diámetro (0,16 px); Q = 10 introduce un error de 0,85 px en promedio.
